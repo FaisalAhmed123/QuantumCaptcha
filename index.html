@@ -4,9 +4,29 @@
   <title>Quantum Physics and Calculus Captcha</title>
   <style>
     /* CSS for the captcha form */
-    #captcha-form {
-      width: 500px;
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #captcha-container {
+      max-width: 500px;
       margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #captcha-question {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     #captcha-problem {
@@ -18,27 +38,50 @@
       width: 100%;
       height: 30px;
       margin-bottom: 10px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
     }
 
     #captcha-submit {
       background-color: #000;
       color: #fff;
       padding: 10px;
+      border: none;
       border-radius: 5px;
       cursor: pointer;
+      width: 100%;
+    }
+
+    #captcha-feedback {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .correct {
+      color: green;
+    }
+
+    .incorrect {
+      color: red;
     }
   </style>
 </head>
 <body>
-  <h1>Quantum Physics and Calculus Captcha</h1>
+  <div id="captcha-container">
+    <h1>Quantum Physics and Calculus Captcha</h1>
 
-  <p>Answer the following question:</p>
+    <div id="captcha-question">
+      <div id="captcha-problem"></div>
 
-  <form id="captcha-form">
-    <div id="captcha-problem"></div>
-    <input type="text" id="captcha-answer" />
-    <button type="submit" id="captcha-submit">Submit</button>
-  </form>
+      <form id="captcha-form">
+        <input type="text" id="captcha-answer" placeholder="Enter your answer" required />
+        <button type="submit" id="captcha-submit">Submit</button>
+      </form>
+
+      <div id="captcha-feedback"></div>
+    </div>
+  </div>
 
   <script>
     // Function to generate a quantum physics or calculus problem
@@ -59,7 +102,6 @@
 
     // Function to generate a quantum physics captcha problem
     function generateQuantumProblem() {
-
       // Arrays of quantum terms to match
       const constants = ['h', 'c', 'G', 'e'];
       const operators = ['Momentum', 'Position', 'Hamiltonian', 'Angular Momentum'];
@@ -75,12 +117,10 @@
       shuffle(matches);
 
       // Create captcha text
-      let problem = `Match the following:`;
-      problem += `\n- ${matches[0][0]}`;
-      problem += `\n- ${matches[0][1]}`;
-      problem += `\n- ${matches[1][0]}`;
-      problem += `\n- ${matches[1][1]}`;
-      
+      let problem = `Match the following:<br>`;
+      problem += `- ${matches[0][0]} - ${matches[0][1]}<br>`;
+      problem += `- ${matches[1][0]} - ${matches[1][1]}`;
+
       // Solution is joined matches
       let solution = matches[0].join('-') + ',' + matches[1].join('-');
 
@@ -88,12 +128,10 @@
         problem: problem,
         solution: solution
       }
-
     }
 
     // Function to generate a calculus captcha problem
     function generateCalculusProblem() {
-
       // Array of calculus problems
       const problems = [
         'Find the derivative of the following function: f(x) = x^2 + 2x + 1',
@@ -126,20 +164,21 @@
 
     // Generate a problem when the page loads
     const problem = generateProblem();
-    document.getElementById('captcha-problem').textContent = problem.problem;
+    document.getElementById('captcha-problem').innerHTML = problem.problem;
 
     // Handle form submission
     document.getElementById('captcha-form').addEventListener('submit', function(event) {
       event.preventDefault();
       const answer = document.getElementById('captcha-answer').value;
+      const feedback = document.getElementById('captcha-feedback');
       if (answer === problem.solution) {
-        alert('Captcha solved correctly!');
+        feedback.innerHTML = '<span class="correct">Captcha solved correctly!</span>';
       } else {
-        alert('Incorrect answer. Please try again.');
+        feedback.innerHTML = '<span class="incorrect">Incorrect answer. Please try again.</span>';
       }
       // Generate a new problem
       const newProblem = generateProblem();
-      document.getElementById('captcha-problem').textContent = newProblem.problem;
+      document.getElementById('captcha-problem').innerHTML = newProblem.problem;
       document.getElementById('captcha-answer').value = '';
       problem = newProblem;
     });
