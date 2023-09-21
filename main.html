@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quantum Physics and Calculus Captcha</title>
+  <style>
+    /* CSS for the captcha form */
+    #captcha-form {
+      width: 500px;
+      margin: 0 auto;
+    }
+
+    #captcha-problem {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    #captcha-answer {
+      width: 100%;
+      height: 30px;
+      margin-bottom: 10px;
+    }
+
+    #captcha-submit {
+      background-color: #000;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quantum Physics and Calculus Captcha</h1>
+
+  <p>Answer the following question:</p>
+
+  <form id="captcha-form">
+    <div id="captcha-problem"></div>
+    <input type="text" id="captcha-answer" />
+    <button type="submit" id="captcha-submit">Submit</button>
+  </form>
+
+  <script>
+    // Function to generate a quantum physics or calculus problem
+    function generateProblem() {
+      // Randomly choose a subject (quantum physics or calculus)
+      const subject = Math.random() > 0.5 ? 'quantumPhysics' : 'calculus';
+
+      // Generate a problem based on the chosen subject
+      switch (subject) {
+        case 'quantumPhysics':
+          return generateQuantumProblem();
+        case 'calculus':
+          return generateCalculusProblem();
+        default:
+          throw new Error('Unknown subject: ' + subject);
+      }
+    }
+
+    // Function to generate a quantum physics captcha problem
+    function generateQuantumProblem() {
+
+      // Arrays of quantum terms to match
+      const constants = ['h', 'c', 'G', 'e'];
+      const operators = ['Momentum', 'Position', 'Hamiltonian', 'Angular Momentum'];
+      const equations = ['Schrodinger', 'de Broglie', 'Compton', 'Bohr'];
+
+      // Randomly choose one from each array
+      const constant = randomChoice(constants);
+      const op = randomChoice(operators);
+      const eq = randomChoice(equations);
+
+      // Randomly order the matched pairs
+      let matches = [[constant, op], [eq, op]];
+      shuffle(matches);
+
+      // Create captcha text
+      let problem = `Match the following:`;
+      problem += `\n- ${matches[0][0]}`;
+      problem += `\n- ${matches[0][1]}`;
+      problem += `\n- ${matches[1][0]}`;
+      problem += `\n- ${matches[1][1]}`;
+      
+      // Solution is joined matches
+      let solution = matches[0].join('-') + ',' + matches[1].join('-');
+
+      return {
+        problem: problem,
+        solution: solution
+      }
+
+    }
+
+    // Function to generate a calculus captcha problem
+    function generateCalculusProblem() {
+
+      // Array of calculus problems
+      const problems = [
+        'Find the derivative of the following function: f(x) = x^2 + 2x + 1',
+        'Find the integral of the following function: f(x) = x^2 + 2x + 1',
+        'Solve the following differential equation: dy/dx = x',
+        'Find the limit of the following function: lim(x->0) (sin(x)/x)'
+      ];
+
+      // Randomly choose a problem
+      const problem = randomChoice(problems);
+
+      return {
+        problem: problem,
+        solution: null
+      }
+    }
+
+    // Helper function to choose a random element from an array
+    function randomChoice(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    // Helper function to shuffle an array in place
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    // Generate a problem when the page loads
+    const problem = generateProblem();
+    document.getElementById('captcha-problem').textContent = problem.problem;
+
+    // Handle form submission
+    document.getElementById('captcha-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const answer = document.getElementById('captcha-answer').value;
+      if (answer === problem.solution) {
+        alert('Captcha solved correctly!');
+      } else {
+        alert('Incorrect answer. Please try again.');
+      }
+      // Generate a new problem
+      const newProblem = generateProblem();
+      document.getElementById('captcha-problem').textContent = newProblem.problem;
+      document.getElementById('captcha-answer').value = '';
+      problem = newProblem;
+    });
+  </script>
+</body>
+</html>
